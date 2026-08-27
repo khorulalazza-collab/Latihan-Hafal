@@ -3,539 +3,565 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Hafalan Quran Anak</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            olive: {
-              DEFAULT: '#8C9E35',
-              soft: '#98A832',
-              dark: '#6E7E26',
-              light: '#F4F6E8'
-            },
-            appbg: '#F7F8F3'
-          },
-          fontFamily: {
-            sans: ['Nunito', 'sans-serif'],
-            quran: ['Amiri', 'serif']
-          }
-        }
-      }
-    }
-  </script>
-
-  <!-- Google Fonts: Nunito & Amiri -->
+  <title>Latihan Hafalan Al-Qur'an 30 Juz</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Font Awesome CDN -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    body {
-      background-color: #E5E7EB;
-      font-family: 'Nunito', sans-serif;
-      user-select: none;
+    :root {
+      --primary: #2EC4B6;
+      --primary-dark: #1E9688;
+      --bg-color: #E6F8F6;
+      --card-bg: #FFFFFF;
+      --text-main: #2C3E50;
+      --text-sub: #7F8C8D;
+      --accent-gold: #FFB703;
+      --danger: #E74C3C;
+      --radius: 18px;
     }
-    .arabic-font {
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Nunito', sans-serif; }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 15px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 450px;
+      background: #F7FBFC;
+      border-radius: var(--radius);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 24px 20px;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+
+    .header h1 { font-size: 1.4rem; font-weight: 800; }
+    .header p { font-size: 0.85rem; opacity: 0.9; margin-top: 4px; }
+
+    .content { padding: 20px; flex: 1; }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid #EAEAEA;
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+
+    .stats-card {
+      display: flex;
+      justify-content: space-around;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-top: -35px;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.06);
+      border: 1px solid #E1F0F5;
+    }
+
+    .stat-item { text-align: center; }
+    .stat-val { font-size: 1.2rem; font-weight: 800; color: var(--primary-dark); }
+    .stat-lbl { font-size: 0.75rem; color: var(--text-sub); font-weight: 700; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 8px;
+      gap: 6px;
+    }
+
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background-color: var(--primary); color: white; }
+    .btn-outline { background-color: transparent; border: 2px solid var(--primary); color: var(--primary); }
+    .btn-gold { background-color: var(--accent-gold); color: #333; }
+    .btn-danger { background-color: var(--danger); color: white; }
+
+    .search-input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 25px;
+      border: 1px solid #DDD;
+      outline: none;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+
+    .surah-list-container {
+      max-height: 380px;
+      overflow-y: auto;
+    }
+
+    .surah-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid #F0F0F0;
+      cursor: pointer;
+    }
+
+    .surah-item:hover { background-color: #F9F9F9; }
+
+    .arabic-display {
+      background: #FFFDF5;
+      border: 2px dashed var(--accent-gold);
+      padding: 20px;
+      border-radius: var(--radius);
+      text-align: center;
+      margin: 15px 0;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .arabic-text {
       font-family: 'Amiri', serif;
+      font-size: 1.9rem;
+      line-height: 2.3;
       direction: rtl;
     }
-    /* Waveform Animation */
-    .bar {
-      transition: height 0.1s ease;
+
+    .translation-text {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    .step-view { display: none; }
+    .step-view.active { display: block; }
+
+    .grid-ayat {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .btn-ayat {
+      padding: 10px;
+      border: 1px solid #DDD;
+      border-radius: 10px;
+      background: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .audio-box {
+      background: #F8F9FA;
+      border: 1px solid #E0E0E0;
+      padding: 12px;
+      border-radius: 12px;
+      margin: 10px 0;
+    }
+
+    .status-msg {
+      font-size: 0.8rem;
+      color: var(--danger);
+      text-align: center;
+      margin-top: 5px;
+      display: none;
+      line-height: 1.3;
     }
   </style>
 </head>
-<body class="flex justify-center items-center min-h-screen">
+<body>
 
-  <!-- Mobile Frame Container -->
-  <div class="w-full max-w-md bg-appbg min-h-screen shadow-2xl relative overflow-hidden flex flex-col justify-between">
-    
-    <!-- MAIN CONTENT CONTAINER AREA -->
-    <main class="flex-1 overflow-y-auto pb-6">
+  <div class="app-container">
+    <div class="header">
+      <h1>Assalamu’alaikum 👋</h1>
+      <p>Latihan Hafalan Al-Qur'an 30 Juz</p>
+    </div>
 
-      <!-- ========================================== -->
-      <!-- SCREEN 1: DASHBOARD UTAMA                  -->
-      <!-- ========================================== -->
-      <section id="screen-1" class="screen space-y-5">
-        <!-- Header Banner -->
-        <div class="bg-gradient-to-br from-olive to-olive-dark text-white p-6 rounded-b-3xl shadow-md">
-          <div class="flex justify-between items-center mb-4">
-            <div>
-              <h1 class="text-xl font-extrabold flex items-center gap-2">
-                <span>Hai, Budi!</span> 👋
-              </h1>
-              <p class="text-xs opacity-90">Semangat muroja'ah hari ini ya!</p>
-            </div>
-            <div class="flex items-center gap-2">
-              <div class="bg-white/20 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 backdrop-blur-sm">
-                ⭐ <span id="user-points">120</span> Poin
-              </div>
-              <div class="bg-white/20 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 backdrop-blur-sm">
-                🔥 <span id="user-streak">3</span> Hari
-              </div>
-            </div>
+    <div class="content">
+
+      <!-- 1. HALAMAN UTAMA -->
+      <div id="view-home" class="step-view active">
+        <div class="stats-card">
+          <div class="stat-item">
+            <div class="stat-val" id="stat-total">0</div>
+            <div class="stat-lbl">Ayat Dihafal</div>
           </div>
-          <!-- Progress Bar Harian -->
-          <div class="bg-black/10 p-3 rounded-2xl backdrop-blur-sm">
-            <div class="flex justify-between text-xs font-semibold mb-1">
-              <span>Target Harian</span>
-              <span id="daily-progress-text">2 / 5 Ayat</span>
-            </div>
-            <div class="w-full bg-white/30 h-2.5 rounded-full overflow-hidden">
-              <div id="daily-progress-bar" class="bg-yellow-400 h-full rounded-full transition-all duration-300" style="width: 40%;"></div>
-            </div>
+          <div class="stat-item">
+            <div class="stat-val">30 Juz</div>
+            <div class="stat-lbl">Total Surat (114)</div>
           </div>
         </div>
 
-        <div class="px-5 space-y-5">
-          <!-- Kategori Modul (Grid 2 Kolom) -->
-          <div>
-            <h2 class="text-sm font-bold text-gray-700 mb-3">Kategori Belajar</h2>
-            <div class="grid grid-cols-2 gap-3">
-              <div class="bg-white p-3.5 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3 cursor-pointer hover:border-olive transition">
-                <div class="w-10 h-10 rounded-xl bg-olive-light flex items-center justify-center text-olive text-lg font-bold">📖</div>
-                <div>
-                  <h3 class="font-bold text-sm text-gray-800">Iqra' & Tajwid</h3>
-                  <p class="text-[10px] text-gray-400">Dasar Bacaan</p>
-                </div>
-              </div>
-              <div class="bg-white p-3.5 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3 cursor-pointer hover:border-olive transition">
-                <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500 text-lg font-bold">🗣️</div>
-                <div>
-                  <h3 class="font-bold text-sm text-gray-800">Tilawah</h3>
-                  <p class="text-[10px] text-gray-400">Bahasa Quran</p>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="card" style="text-align: center; padding: 25px 18px;">
+          <h2 style="color: var(--primary-dark); font-size: 1.3rem; margin-bottom: 8px;">📖 Latihan Hafalan Per Ayat</h2>
+          <p style="font-size: 0.88rem; color: var(--text-sub); margin-bottom: 20px; line-height: 1.4;">
+            Pilih surat, rekam hafalan Anda per ayat, dan bandingkan langsung dengan bacaan Syekh.
+          </p>
+          <button class="btn btn-gold" onclick="showView('view-surah')">🚀 MULAI LATIHAN</button>
+        </div>
+      </div>
 
-          <!-- Jalur Belajar (Daftar Surah) -->
-          <div>
-            <h2 class="text-sm font-bold text-gray-700 mb-3">Surah Pendek (Juz 30)</h2>
-            <div id="surah-list" class="space-y-3">
-              <!-- Item Surah disajikan via JavaScript -->
-            </div>
+      <!-- 2. HALAMAN PILIH SURAT -->
+      <div id="view-surah" class="step-view">
+        <button class="btn btn-outline" style="width: auto; padding: 6px 14px; font-size: 0.8rem; margin-bottom: 12px;" onclick="showView('view-home')">← Beranda</button>
+        <div class="card">
+          <h3 style="margin-bottom: 10px;">Pilih Surat (114 Surat)</h3>
+          <input type="text" id="search-input" class="search-input" placeholder="🔍 Cari Surat..." onkeyup="filterSurah()">
+          <div id="surah-list" class="surah-list-container">
+            <div style="text-align:center; padding: 20px; color: var(--text-sub);">⏳ Memuat daftar surat...</div>
           </div>
         </div>
-      </section>
+      </div>
 
-      <!-- ========================================== -->
-      <!-- SCREEN 2: PENGATURAN LATIHAN HAFALAN       -->
-      <!-- ========================================== -->
-      <section id="screen-2" class="screen hidden p-5 space-y-5">
-        <button onclick="navigateTo('screen-1')" class="text-xs font-bold text-olive flex items-center gap-1 bg-olive-light px-3 py-1.5 rounded-full w-max">
-          <i class="fa-solid fa-arrow-left"></i> Kembali
-        </button>
-
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-          <h2 id="setup-surah-title" class="font-extrabold text-lg text-gray-800 mb-1">Surah Al-Fatihah</h2>
-          <p class="text-xs text-gray-400">Atur skema latihan hafalanmu di bawah ini.</p>
+      <!-- 3. HALAMAN PILIH AYAT -->
+      <div id="view-ayat-select" class="step-view">
+        <button class="btn btn-outline" style="width: auto; padding: 6px 14px; font-size: 0.8rem; margin-bottom: 12px;" onclick="showView('view-surah')">← Ganti Surat</button>
+        <div class="card">
+          <h3 id="selected-surah-title">Nama Surat</h3>
+          <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 10px;">Pilih nomor ayat:</p>
+          <div id="grid-ayat-container" class="grid-ayat"></div>
         </div>
+      </div>
 
-        <!-- Filter Blok Ayat -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-3">
-          <label class="text-xs font-bold text-gray-700">Pilih Blok Ayat:</label>
-          <div class="grid grid-cols-2 gap-2">
-            <button class="px-3 py-2 text-xs font-bold rounded-xl border-2 border-olive bg-olive-light text-olive">Blok 1 (Ayat 1-4)</button>
-            <button class="px-3 py-2 text-xs font-bold rounded-xl border border-gray-200 text-gray-500">Blok 2 (Ayat 5-7)</button>
+      <!-- 4. HALAMAN REKAM & BANDINGKAN -->
+      <div id="view-practice" class="step-view">
+        <button class="btn btn-outline" style="width: auto; padding: 6px 14px; font-size: 0.8rem; margin-bottom: 12px;" onclick="showView('view-ayat-select')">← Pilih Ayat Lain</button>
+        
+        <div class="card">
+          <h3 id="practice-title">Al-Fatihah : Ayat 1</h3>
+
+          <div class="arabic-display">
+            <div id="arabic-text" class="arabic-text">⏳ Memuat ayat...</div>
+            <div id="translation-text" class="translation-text"></div>
           </div>
-        </div>
 
-        <!-- Pengaturan Pengulangan -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-3">
-          <label class="text-xs font-bold text-gray-700">Pengulangan Audio Qari:</label>
-          <div class="flex gap-2">
-            <button class="flex-1 py-2 text-xs font-bold rounded-xl border border-gray-200 text-gray-600">1x</button>
-            <button class="flex-1 py-2 text-xs font-bold rounded-xl border-2 border-olive bg-olive-light text-olive">3x</button>
-            <button class="flex-1 py-2 text-xs font-bold rounded-xl border border-gray-200 text-gray-600">5x</button>
-          </div>
-        </div>
-
-        <!-- Pemilih Qari -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center cursor-pointer" onclick="openQariModal()">
-          <div>
-            <span class="text-[10px] text-gray-400 font-bold block">AUDIO REFERENCE QARI</span>
-            <span id="selected-qari-name" class="text-xs font-bold text-gray-800">Mishary Rashid Alafasy</span>
-          </div>
-          <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
-        </div>
-
-        <!-- CTA Button -->
-        <button onclick="startPractice()" class="w-full py-3.5 bg-olive hover:bg-olive-dark text-white font-extrabold rounded-2xl shadow-lg shadow-olive/30 transition text-sm">
-          🚀 MULAI LATIHAN HAFALAN
-        </button>
-      </section>
-
-      <!-- ========================================== -->
-      <!-- SCREEN 4: UJI HAFALAN & PEREKAM VOICE      -->
-      <!-- ========================================== -->
-      <section id="screen-4" class="screen hidden p-5 space-y-4">
-        <div class="flex justify-between items-center">
-          <button onclick="navigateTo('screen-2')" class="text-xs font-bold text-gray-500">
-            <i class="fa-solid fa-xmark"></i> Batal
-          </button>
-          <span id="rec-counter" class="text-xs font-bold bg-amber-100 text-amber-700 px-3 py-1 rounded-full">0/4 Direkam</span>
-        </div>
-
-        <!-- Header Nomor Ayat (Grid Step Indicator) -->
-        <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex justify-around" id="verse-step-indicator">
-          <!-- Step indicator disajikan via JS -->
-        </div>
-
-        <!-- Display Status Ayat Aktif -->
-        <div class="text-center py-2">
-          <span class="text-xs font-bold text-gray-400">Target Hafalan:</span>
-          <h3 id="current-verse-title" class="font-extrabold text-base text-gray-800">Al-Fatihah : Ayat 1</h3>
-        </div>
-
-        <!-- Panel Bantuan 2x2 Grid -->
-        <div class="grid grid-cols-2 gap-2.5">
-          <button onclick="playCurrentQariAudio()" class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex items-center justify-center gap-2 text-xs font-bold text-gray-700 hover:bg-gray-50">
-            <i class="fa-solid fa-volume-high text-olive"></i> Play Ayat
-          </button>
-          <button onclick="openAyatModal()" class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex items-center justify-center gap-2 text-xs font-bold text-gray-700 hover:bg-gray-50">
-            <i class="fa-solid fa-eye text-blue-500"></i> Lihat Ayat
-          </button>
-          <button onclick="playAwalanAudio()" class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex items-center justify-center gap-2 text-xs font-bold text-gray-700 hover:bg-gray-50">
-            <i class="fa-solid fa-play text-amber-500"></i> Play Awalan
-          </button>
-          <button onclick="alert('Awalan Teks: ' + currentAyatData[currentVerseIndex].teksArab.substring(0, 15) + '...')" class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex items-center justify-center gap-2 text-xs font-bold text-gray-700 hover:bg-gray-50">
-            <i class="fa-solid fa-font text-purple-500"></i> Lihat Awalan
-          </button>
-        </div>
-
-        <!-- Visualizer Waveform Animation & Recording UI -->
-        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm text-center space-y-4">
-          <div id="rec-timer" class="text-xl font-extrabold text-gray-700">00:00</div>
+          <button id="btn-toggle-hide" class="btn btn-gold" onclick="toggleBlurAyat()">🙈 Sembunyikan Teks Ayat</button>
           
-          <!-- Animated Waveform Bars -->
-          <div id="waveform" class="flex justify-center items-center gap-1.5 h-12">
-            <div class="bar w-1.5 bg-gray-200 rounded-full h-3"></div>
-            <div class="bar w-1.5 bg-gray-200 rounded-full h-6"></div>
-            <div class="bar w-1.5 bg-gray-200 rounded-full h-10"></div>
-            <div class="bar w-1.5 bg-gray-200 rounded-full h-4"></div>
-            <div class="bar w-1.5 bg-gray-200 rounded-full h-8"></div>
+          <hr style="border: 0; border-top: 1px solid #EEE; margin: 15px 0;">
+
+          <!-- BAGIAN 1: REKAM AUDIO HAFALAN USER -->
+          <h4 style="margin-bottom: 6px;">1. Rekam Hafalan Anda</h4>
+          <div class="audio-box">
+            <button id="btn-record" class="btn btn-danger" onclick="toggleRecord()">🎙️ Mulai Rekam Audio</button>
+            <div id="record-timer" style="text-align: center; font-weight: 800; font-size: 1.1rem; margin-top: 6px; display: none; color: var(--danger);">● Merekam... <span id="timer-val">00:00</span></div>
+            <audio id="user-audio-player" controls style="width: 100%; margin-top: 10px; display: none;"></audio>
+            <div id="rec-error" class="status-msg"></div>
           </div>
 
-          <!-- Perekam Voice Button -->
-          <button id="btn-record" onclick="toggleRecordState()" class="w-full py-4 bg-olive hover:bg-olive-dark text-white font-extrabold rounded-2xl shadow-lg shadow-olive/30 flex items-center justify-center gap-2 text-sm transition">
-            <i class="fa-solid fa-microphone text-lg"></i> <span id="btn-record-text">Rekam Hafalanmu</span>
-          </button>
-        </div>
-      </section>
-
-      <!-- ========================================== -->
-      <!-- SCREEN 5: LAYAR HASIL EVALUASI             -->
-      <!-- ========================================== -->
-      <section id="screen-5" class="screen hidden p-5 space-y-5">
-        <!-- Ringkasan Skor Header -->
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 text-center space-y-3">
-          <div class="inline-block bg-emerald-100 text-emerald-800 font-extrabold text-2xl px-6 py-2 rounded-2xl">
-            85%
+          <!-- BAGIAN 2: AUDIO SYEKH -->
+          <h4 style="margin-bottom: 6px; margin-top: 15px;">2. Bandingkan dengan Syekh</h4>
+          <div class="audio-box">
+            <button class="btn btn-outline" onclick="playSyekhAudio()">🔊 Putar Audio Syekh (Mishary Rashid)</button>
+            <div id="syekh-status" style="font-size: 0.8rem; text-align: center; margin-top: 6px; color: var(--primary-dark);"></div>
+            <audio id="syekh-audio-player" controls style="width: 100%; margin-top: 10px; display: none;"></audio>
           </div>
-          <h2 class="font-extrabold text-lg text-gray-800">MasyaAllah, Luar Biasa! 🎉</h2>
-          <p class="text-xs text-gray-500">Hafalanmu sudah sangat lengkap. Dengarkan kembali rekamanmu untuk evaluasi.</p>
+
+          <button class="btn btn-primary" style="margin-top: 15px;" onclick="tandaiSelesai()">✓ Tandai Ayat Dihafal</button>
         </div>
-
-        <!-- Koreksi Per Ayat List -->
-        <div class="space-y-3">
-          <h3 class="text-xs font-bold text-gray-700">Hasil Rekaman Per Ayat:</h3>
-          <div id="evaluation-list" class="space-y-3">
-            <!-- Render list evaluasi via JS -->
-          </div>
-        </div>
-
-        <button onclick="finishEvaluation()" class="w-full py-3.5 bg-olive hover:bg-olive-dark text-white font-extrabold rounded-2xl shadow-lg shadow-olive/30 transition text-sm">
-          ✓ SELESAI & SIMPAN PROGRES
-        </button>
-      </section>
-
-    </main>
-  </div>
-
-  <!-- ========================================== -->
-  <!-- MODAL 3: PUSTAKA AUDIO & TEKS AYAT         -->
-  <!-- ========================================== -->
-  <div id="modal-ayat" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex justify-center items-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 text-center">
-      <div class="flex justify-between items-center border-b pb-2">
-        <h3 id="modal-ayat-title" class="font-bold text-sm text-gray-700">Teks Ayat</h3>
-        <button onclick="closeAyatModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <div id="modal-ayat-arabic" class="arabic-font text-2xl text-gray-800 py-4 leading-relaxed">
-        Loading...
-      </div>
-      <button onclick="closeAyatModal()" class="w-full py-2.5 bg-olive text-white font-bold rounded-xl text-xs">
-        Tutup
-      </button>
+
     </div>
   </div>
 
-  <!-- MODAL SELECTOR QARI -->
-  <div id="modal-qari" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex justify-center items-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-3">
-      <h3 class="font-bold text-sm text-gray-700 border-b pb-2">Pilih Syekh / Qari</h3>
-      <div class="space-y-2">
-        <div onclick="selectQari('ar.alafasy', 'Mishary Rashid Alafasy')" class="p-3 bg-gray-50 rounded-xl cursor-pointer hover:bg-olive-light font-bold text-xs text-gray-700 flex justify-between">
-          <span>Mishary Rashid Alafasy</span>
-          <i class="fa-solid fa-check text-olive"></i>
-        </div>
-        <div onclick="selectQari('ar.abdulbasitmurattal', 'Abdul Basit Murattal')" class="p-3 bg-gray-50 rounded-xl cursor-pointer hover:bg-olive-light font-bold text-xs text-gray-700 flex justify-between">
-          <span>Abdul Basit Murattal</span>
-        </div>
-        <div onclick="selectQari('ar.shaatree', 'Abu Bakr Asy-Syatiri')" class="p-3 bg-gray-50 rounded-xl cursor-pointer hover:bg-olive-light font-bold text-xs text-gray-700 flex justify-between">
-          <span>Abu Bakr Asy-Syatiri</span>
-        </div>
-      </div>
-      <button onclick="closeQariModal()" class="w-full py-2 bg-gray-200 text-gray-700 font-bold rounded-xl text-xs mt-2">Batal</button>
-    </div>
-  </div>
-
-  <!-- AUDIO PLAYER ELEMENT PUBLIC -->
-  <audio id="qari-audio-player" class="hidden"></audio>
-
-  <!-- JAVASCRIPT LOGIC -->
   <script>
-    // Konfigurasi Integration Google Sheets (Opsional)
-    const GOOGLE_SCRIPT_URL = ""; 
+    var SURAH_LIST = [];
+    var currentSurah = null;
+    var currentVerse = null;
+    var isHidden = false;
+    var totalDihafalCount = 0;
 
-    // State Aplikasi
-    let currentSurahNo = 1;
-    let selectedQariId = 'ar.alafasy';
-    let currentAyatData = [];
-    let currentVerseIndex = 0;
-    let recordedAudioBlobs = [];
-    
-    // Media Recorder States
-    let mediaRecorder = null;
-    let audioChunks = [];
-    let isRecording = false;
-    let timerInterval = null;
-    let secondsRecorded = 0;
-    let waveInterval = null;
+    // Media Recorder Variables
+    var mediaRecorder = null;
+    var audioChunks = [];
+    var isRecording = false;
+    var recTimerInterval = null;
+    var recSeconds = 0;
+    var mediaStream = null;
 
-    // Data Surah Pendek
-    const SURAH_LIST_DATA = [
-      { no: 1, name: 'Al-Fatihah', verses: 7, progress: 80 },
-      { no: 114, name: 'An-Nas', verses: 6, progress: 40 },
-      { no: 113, name: 'Al-Falaq', verses: 5, progress: 0 },
-      { no: 112, name: 'Al-Ikhlas', verses: 4, progress: 100 },
-      { no: 111, name: 'Al-Masad', verses: 5, progress: 0 }
-    ];
-
-    document.addEventListener('DOMContentLoaded', () => {
-      renderSurahList();
-      loadLocalStorageData();
+    document.addEventListener("DOMContentLoaded", function() {
+      muatDaftarSurah();
+      muatStatistik();
     });
 
-    // Navigasi Screen SPA
-    function navigateTo(screenId) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-      document.getElementById(screenId).classList.remove('hidden');
+    function showView(viewId) {
+      stopRecording();
+      var syekhPlayer = document.getElementById('syekh-audio-player');
+      if (syekhPlayer) syekhPlayer.pause();
+
+      document.querySelectorAll('.step-view').forEach(el => el.classList.remove('active'));
+      document.getElementById(viewId).classList.add('active');
     }
 
-    // Render Surah ke Screen 1
-    function renderSurahList() {
-      const container = document.getElementById('surah-list');
-      container.innerHTML = SURAH_LIST_DATA.map(surah => `
-        <div onclick="openSetupSurah(${surah.no}, '${surah.name}')" class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between cursor-pointer hover:border-olive transition">
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-xl bg-olive-light text-olive font-extrabold text-xs flex items-center justify-center">${surah.no}</div>
-            <div>
-              <h3 class="font-bold text-sm text-gray-800">${surah.name}</h3>
-              <p class="text-[10px] text-gray-400">${surah.verses} Ayat</p>
-            </div>
-          </div>
-          <div class="w-24">
-            <div class="flex justify-between text-[10px] font-bold text-gray-500 mb-1">
-              <span>Hafalan</span>
-              <span>${surah.progress}%</span>
-            </div>
-            <div class="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
-              <div class="bg-olive h-full rounded-full" style="width: ${surah.progress}%"></div>
-            </div>
-          </div>
-        </div>
-      `).join('');
+    function muatStatistik() {
+      totalDihafalCount = parseInt(localStorage.getItem('total_hafalan_count') || 0);
+      document.getElementById('stat-total').innerText = totalDihafalCount;
     }
 
-    // Buka Pengaturan Hafalan (Screen 2)
-    function openSetupSurah(no, name) {
-      currentSurahNo = no;
-      document.getElementById('setup-surah-title').innerText = `Surah ${name}`;
-      navigateTo('screen-2');
-    }
-
-    // Modal Qari Selector
-    function openQariModal() { document.getElementById('modal-qari').classList.remove('hidden'); }
-    function closeQariModal() { document.getElementById('modal-qari').classList.add('hidden'); }
-    function selectQari(id, name) {
-      selectedQariId = id;
-      document.getElementById('selected-qari-name').innerText = name;
-      closeQariModal();
-    }
-
-    // Mulai Latihan (Fetch Data API Quran)
-    function startPractice() {
-      fetch(`https://api.alquran.cloud/v1/surah/${currentSurahNo}/${selectedQariId}`)
+    function muatDaftarSurah() {
+      fetch('https://equran.id/api/v2/surat')
         .then(res => res.json())
-        .then(data => {
-          currentAyatData = data.data.ayahs;
-          currentVerseIndex = 0;
-          recordedAudioBlobs = new Array(currentAyatData.length).fill(null);
-          setupVersePracticeScreen();
-          navigateTo('screen-4');
+        .then(resData => {
+          if (resData && resData.data) {
+            SURAH_LIST = resData.data;
+            renderSurahList(SURAH_LIST);
+          }
+        })
+        .catch(err => {
+          document.getElementById('surah-list').innerHTML = '<div style="color:red; text-align:center;">Gagal memuat surat. Cek koneksi internet.</div>';
         });
     }
 
-    // Setup Tampilan Layar 4 Uji Hafalan
-    function setupVersePracticeScreen() {
-      const stepContainer = document.getElementById('verse-step-indicator');
-      stepContainer.innerHTML = currentAyatData.map((_, idx) => `
-        <div class="w-7 h-7 rounded-lg font-bold text-xs flex items-center justify-center ${
-          idx === currentVerseIndex ? 'bg-amber-400 text-white' : 
-          recordedAudioBlobs[idx] ? 'bg-emerald-500 text-white' : 'bg-gray-100 text-gray-400'
-        }">${idx + 1}</div>
-      `).join('');
-
-      document.getElementById('rec-counter').innerText = `${recordedAudioBlobs.filter(Boolean).length}/${currentAyatData.length} Direkam`;
-      document.getElementById('current-verse-title').innerText = `Ayat ${currentVerseIndex + 1}`;
+    function renderSurahList(list) {
+      var container = document.getElementById('surah-list');
+      container.innerHTML = '';
+      list.forEach(function(item) {
+        var div = document.createElement('div');
+        div.className = 'surah-item';
+        div.innerHTML = '<div><strong>' + item.nomor + '. ' + item.namaLatin + ' (' + item.nama + ')</strong><br><small style="color:#7F8C8D">' + item.jumlahAyat + ' Ayat • ' + item.tempatTurun + '</small></div>➔';
+        div.onclick = function() { selectSurah(item); };
+        container.appendChild(div);
+      });
     }
 
-    // Buka & Tutup Modal Teks Ayat
-    function openAyatModal() {
-      document.getElementById('modal-ayat-title').innerText = `Ayat ${currentVerseIndex + 1}`;
-      document.getElementById('modal-ayat-arabic').innerText = currentAyatData[currentVerseIndex].text;
-      document.getElementById('modal-ayat').classList.remove('hidden');
-    }
-    function closeAyatModal() { document.getElementById('modal-ayat').classList.add('hidden'); }
-
-    // Audio Player Qari
-    function playCurrentQariAudio() {
-      const player = document.getElementById('qari-audio-player');
-      player.src = currentAyatData[currentVerseIndex].audio;
-      player.play();
+    function filterSurah() {
+      var query = document.getElementById('search-input').value.toLowerCase();
+      var filtered = SURAH_LIST.filter(function(s) {
+        return s.namaLatin.toLowerCase().includes(query) || s.nomor.toString().includes(query);
+      });
+      renderSurahList(filtered);
     }
 
-    function playAwalanAudio() {
-      playCurrentQariAudio();
-      setTimeout(() => {
-        document.getElementById('qari-audio-player').pause();
-      }, 2500); // Putar 2.5 detik pertama saja
+    function selectSurah(surah) {
+      currentSurah = surah;
+      document.getElementById('selected-surah-title').innerText = surah.nomor + '. ' + surah.namaLatin + ' (' + surah.jumlahAyat + ' Ayat)';
+      
+      var grid = document.getElementById('grid-ayat-container');
+      grid.innerHTML = '';
+      for (var i = 1; i <= surah.jumlahAyat; i++) {
+        (function(num) {
+          var btn = document.createElement('button');
+          btn.className = 'btn-ayat';
+          btn.innerText = num;
+          btn.onclick = function() { selectVerse(num); };
+          grid.appendChild(btn);
+        })(i);
+      }
+      showView('view-ayat-select');
     }
 
-    // PEREKAM VOICE LOGIC (MediaRecorder)
-    function toggleRecordState() {
+    function selectVerse(verseNo) {
+      currentVerse = verseNo;
+
+      document.getElementById('practice-title').innerText = currentSurah.namaLatin + " : Ayat " + verseNo;
+      document.getElementById('arabic-text').innerText = "⏳ Memuat ayat...";
+      document.getElementById('translation-text').innerText = "";
+
+      // Reset Players
+      var userAudio = document.getElementById('user-audio-player');
+      userAudio.style.display = 'none'; userAudio.src = '';
+
+      var syekhPlayer = document.getElementById('syekh-audio-player');
+      syekhPlayer.style.display = 'none'; syekhPlayer.src = '';
+
+      // Reset UI state
+      isHidden = false;
+      document.getElementById('arabic-text').style.filter = 'none';
+      document.getElementById('btn-toggle-hide').innerText = '🙈 Sembunyikan Teks Ayat';
+      document.getElementById('syekh-status').innerText = '';
+      document.getElementById('rec-error').style.display = 'none';
+
+      showView('view-practice');
+
+      fetch('https://equran.id/api/v2/surat/' + currentSurah.nomor)
+        .then(res => res.json())
+        .then(resData => {
+          if (resData && resData.data && resData.data.ayat) {
+            var verseData = resData.data.ayat[verseNo - 1];
+            document.getElementById('arabic-text').innerText = verseData.teksArab;
+            document.getElementById('translation-text').innerText = '"' + verseData.teksIndonesia + '"';
+          }
+        })
+        .catch(err => {
+          document.getElementById('arabic-text').innerText = "Gagal memuat teks ayat.";
+        });
+    }
+
+    function toggleBlurAyat() {
+      var arText = document.getElementById('arabic-text');
+      var btn = document.getElementById('btn-toggle-hide');
+      isHidden = !isHidden;
+      arText.style.filter = isHidden ? 'blur(8px)' : 'none';
+      btn.innerText = isHidden ? '👁 Tampilkan Teks Ayat' : '🙈 Sembunyikan Teks Ayat';
+    }
+
+    // FUNGSI REKAM AUDIO (MENGGUNAKAN MEDIARECORDER MURNI)
+    function toggleRecord() {
       if (!isRecording) {
-        startAudioRecording();
+        startRecording();
       } else {
-        stopAudioRecording();
+        stopRecording();
       }
     }
 
-    function startAudioRecording() {
-      navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(stream => {
-          mediaRecorder = new MediaRecorder(stream);
+    function startRecording() {
+      var errEl = document.getElementById('rec-error');
+      errEl.style.display = 'none';
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        errEl.innerHTML = "⚠️ Browser ini tidak mendukung fitur perekaman suara.";
+        errEl.style.display = 'block';
+        return;
+      }
+
+      var constraints = { 
+        audio: { echoCancellation: true, noiseSuppression: true } 
+      };
+
+      navigator.mediaDevices.getUserMedia(constraints)
+        .then(function(stream) {
+          mediaStream = stream;
           audioChunks = [];
 
-          mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-          mediaRecorder.onstop = () => {
-            const blob = new Blob(audioChunks, { type: 'audio/mp4' });
-            recordedAudioBlobs[currentVerseIndex] = URL.createObjectURL(blob);
-            
-            // Lanjut ke ayat berikutnya atau hasil
-            if (currentVerseIndex < currentAyatData.length - 1) {
-              currentVerseIndex++;
-              setupVersePracticeScreen();
-            } else {
-              renderEvaluationScreen();
-              navigateTo('screen-5');
+          var options = {};
+          if (typeof MediaRecorder.isTypeSupported === 'function') {
+            if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+              options = { mimeType: 'audio/webm;codecs=opus' };
+            } else if (MediaRecorder.isTypeSupported('audio/webm')) {
+              options = { mimeType: 'audio/webm' };
+            } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+              options = { mimeType: 'audio/mp4' };
+            }
+          }
+
+          try {
+            mediaRecorder = new MediaRecorder(stream, options);
+          } catch (e) {
+            mediaRecorder = new MediaRecorder(stream);
+          }
+
+          mediaRecorder.ondataavailable = function(e) {
+            if (e.data && e.data.size > 0) {
+              audioChunks.push(e.data);
             }
           };
 
-          mediaRecorder.start();
-          isRecording = true;
-          document.getElementById('btn-record-text').innerText = "Ayat Berikutnya / Selesai";
-          document.getElementById('btn-record').classList.replace('bg-olive', 'bg-red-500');
+          mediaRecorder.onstop = function() {
+            var mimeType = mediaRecorder.mimeType || 'audio/wav';
+            var audioBlob = new Blob(audioChunks, { type: mimeType });
+            var audioUrl = URL.createObjectURL(audioBlob);
+            var player = document.getElementById('user-audio-player');
+            player.src = audioUrl;
+            player.style.display = 'block';
+          };
 
-          // Timer & Waveform Effect
-          secondsRecorded = 0;
-          timerInterval = setInterval(() => {
-            secondsRecorded++;
-            const m = String(Math.floor(secondsRecorded / 60)).padStart(2, '0');
-            const s = String(secondsRecorded % 60).padStart(2, '0');
-            document.getElementById('rec-timer').innerText = `${m}:${s}`;
+          mediaRecorder.start(100);
+          isRecording = true;
+
+          document.getElementById('btn-record').innerText = "⏹ Selesai Rekam";
+          document.getElementById('record-timer').style.display = 'block';
+
+          recSeconds = 0;
+          recTimerInterval = setInterval(function() {
+            recSeconds++;
+            var m = String(Math.floor(recSeconds / 60)).padStart(2, '0');
+            var s = String(recSeconds % 60).padStart(2, '0');
+            document.getElementById('timer-val').innerText = m + ":" + s;
           }, 1000);
 
-          waveInterval = setInterval(() => {
-            document.querySelectorAll('#waveform .bar').forEach(b => {
-              b.style.height = `${Math.floor(Math.random() * 30) + 8}px`;
-            });
-          }, 100);
+        })
+        .catch(function(err) {
+          console.error("Recording error:", err);
+          var pesan = "";
+          if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+            pesan = "⚠️ <strong>Izin Mikrofon Ditolak.</strong><br>Silakan izinkan akses mikrofon di browser Anda.";
+          } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+            pesan = "⚠️ <strong>Mikrofon tidak ditemukan.</strong>";
+          } else {
+            pesan = "⚠️ <strong>Gagal merekam:</strong> " + err.message;
+          }
+          errEl.innerHTML = pesan;
+          errEl.style.display = 'block';
         });
     }
 
-    function stopAudioRecording() {
+    function stopRecording() {
       if (mediaRecorder && isRecording) {
         mediaRecorder.stop();
+        if (mediaStream) {
+          mediaStream.getTracks().forEach(track => track.stop());
+        }
         isRecording = false;
-        clearInterval(timerInterval);
-        clearInterval(waveInterval);
-        document.getElementById('btn-record-text').innerText = "Rekam Hafalanmu";
-        document.getElementById('btn-record').classList.replace('bg-red-500', 'bg-olive');
-        document.getElementById('rec-timer').innerText = "00:00";
+        clearInterval(recTimerInterval);
+
+        document.getElementById('btn-record').innerText = "🎙️ Rekam Ulang";
+        document.getElementById('record-timer').style.display = 'none';
       }
     }
 
-    // RENDER SCREEN 5 (HASIL EVALUASI)
-    function renderEvaluationScreen() {
-      const container = document.getElementById('evaluation-list');
-      container.innerHTML = currentAyatData.map((item, idx) => `
-        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm space-y-3">
-          <div class="flex justify-between items-center border-b pb-2">
-            <span class="font-bold text-xs text-olive">Ayat ${idx + 1}</span>
-            <span class="arabic-font text-lg text-gray-800">${item.text}</span>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <button onclick="new Audio('${recordedAudioBlobs[idx]}').play()" class="py-2 px-3 bg-emerald-50 text-emerald-700 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5">
-              <i class="fa-solid fa-play"></i> Suara Kamu
-            </button>
-            <button onclick="new Audio('${item.audio}').play()" class="py-2 px-3 bg-blue-50 text-blue-700 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5">
-              <i class="fa-solid fa-volume-high"></i> Suara Qari
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
+    function playSyekhAudio() {
+      if(!currentSurah || !currentVerse) return;
 
-    function finishEvaluation() {
-      let points = parseInt(localStorage.getItem('user_points') || 120) + 10;
-      localStorage.setItem('user_points', points);
-      loadLocalStorageData();
+      var statusEl = document.getElementById('syekh-status');
+      var player = document.getElementById('syekh-audio-player');
+      
+      statusEl.innerText = "⏳ Memuat audio Syekh...";
+      
+      var apiUrl = "https://api.alquran.cloud/v1/ayah/" + currentSurah.nomor + ":" + currentVerse + "/ar.alafasy";
 
-      // Opsional Fetch ke Google Sheets jika URL diisi
-      if (GOOGLE_SCRIPT_URL) {
-        fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          body: JSON.stringify({ surah: currentSurahNo, date: new Date().toISOString() })
+      fetch(apiUrl)
+        .then(res => res.json())
+        .then(data => {
+          if(data && data.data && data.data.audio) {
+            player.src = data.data.audio;
+            player.style.display = 'block';
+            player.play();
+            statusEl.innerText = "🔊 Memutar Audio Syekh (Mishary Rashid)";
+          } else {
+            statusEl.innerText = "❌ Audio tidak ditemukan.";
+          }
+        })
+        .catch(err => {
+          statusEl.innerText = "❌ Gagal memuat audio. Pastikan terhubung internet.";
         });
-      }
 
-      navigateTo('screen-1');
+      player.onended = function() {
+        statusEl.innerText = "✓ Selesai diputar";
+      };
     }
 
-    function loadLocalStorageData() {
-      document.getElementById('user-points').innerText = localStorage.getItem('user_points') || 120;
+    function tandaiSelesai() {
+      totalDihafalCount++;
+      localStorage.setItem('total_hafalan_count', totalDihafalCount);
+      muatStatistik();
+      alert("Alhamdulillah! Hafalan Ayat " + currentVerse + " dari Surat " + currentSurah.namaLatin + " telah disimpan.");
+      showView('view-home');
     }
   </script>
 </body>
